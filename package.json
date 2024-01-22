@@ -1,0 +1,33 @@
+{
+    "name": "rukia",
+    "version": "1.0.0",
+    "description": "",
+    "main": "dist/index.js",
+    "bin": {
+        "rukia": "./dist/index.js"
+    },
+    "type": "module",
+    "scripts": {
+        "build": "npx tsc",
+        "start": "node dist/index.js"
+    },
+    "keywords": [],
+    "author": "",
+    "license": "ISC",
+    "repository": "https://github.com/bikky-kc013/rukia-cli",
+    "homepage": "https://github.com/bikky-kc013/rukia-cli/blob/main/README.md",
+    "dependencies": {
+        "chalk": "^5.3.0",
+        "commander": "^11.1.0",
+        "express": "^4.18.2",
+        "figlet": "^1.7.0",
+        "ts-node": "^10.9.2"
+    },
+    "devDependencies": {
+        "@types/chalk": "^2.2.0",
+        "@types/express": "^4.17.21",
+        "@types/figlet": "^1.5.8",
+        "dotenv": "^16.3.2",
+        "typescript": "^5.3.3"
+    }
+}
