@@ -195,6 +195,9 @@ if (options.show) {
         }
     }
     console.table(showData);
+    const commands = chalk.bold.black("ctrl + C");
+    const exitCommand = chalk.bold.green('If you want to exit, press');
+    console.log(`${exitCommand} ${commands}`);
 }
 readline.emitKeypressEvents(process.stdin);
 process.stdin.setRawMode(true);

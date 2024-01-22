@@ -65,7 +65,6 @@ function createDir(filepath: string) {
 }
 
 
-
 //Function for creating the file
 function createFile(filepath: string) {
   fs.openSync(filepath, "w");
@@ -232,6 +231,10 @@ for (const [key, value] of Object.entries(data)) {
   }
 }
 console.table(showData);
+const commands = chalk.bold.black("ctrl + C");
+const exitCommand = chalk.bold.green('If you want to exit, press');
+console.log(`${exitCommand} ${commands}`);
+
 }
 
 
