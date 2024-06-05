@@ -11,67 +11,58 @@ import chalk from 'chalk';
 import dotenv from 'dotenv';
 dotenv.config();
 
-
-
-
-
 const program = new Command();
 program
-  .version("1.0.0")
-  .description("A cli tool that helps you in your development process")
-  .option("-v, --version", "Displays the version number")
-  .option("-l, --ls  [value]", "List directory contents")
-  .option("-m, --mkdir <value>", "Create a directory")
-  .option("-t, --touch <value>", "Create a file")
-  .option("-h --help", "Shows all the availaible options")
-  .option("ctrl + l", "Clear the screen")
-  .option("ctrl + C", " exit the current program")
-  .option("-d, --rm <value>", "Delete a file")
-  .option("--draw <name>", "Draw ASCII art for the specified name")
-  .option("--show", "Display contents of the .env file")
+  .version('1.0.0')
+  .description('A cli tool that helps you in your development process')
+  .option('-v, --version', 'Displays the version number')
+  .option('-l, --ls  [value]', 'List directory contents')
+  .option('-m, --mkdir <value>', 'Create a directory')
+  .option('-t, --touch <value>', 'Create a file')
+  .option('-h --help', 'Shows all the availaible options')
+  .option('ctrl + l', 'Clear the screen')
+  .option('ctrl + C', ' exit the current program')
+  .option('-d, --rm <value>', 'Delete a file')
+  .option('--draw <name>', 'Draw ASCII art for the specified name')
+  .option('--show', 'Display contents of the .env file')
   .parse(process.argv);
 
 const options = program.opts();
 
-
 //FUnction for Listing all the availaible file in the directory
 async function listDirContents(filepath: string) {
   try {
-    const files = await fs.promises.readdir(filepath);  
-    const detailedFilesPromises = files.map(async (file: string) => { 
-    let fileDetails = await fs.promises.lstat(path.resolve(filepath, file));
-    const { size, birthtime } = fileDetails;
-    return { filename: file, "size(KB)": size, created_at: birthtime };
+    const files = await fs.promises.readdir(filepath);
+    const detailedFilesPromises = files.map(async (file: string) => {
+      let fileDetails = await fs.promises.lstat(path.resolve(filepath, file));
+      const { size, birthtime } = fileDetails;
+      return { filename: file, 'size(KB)': size, created_at: birthtime };
     });
-    const fileDetail  =await Promise.all(detailedFilesPromises);
+    const fileDetail = await Promise.all(detailedFilesPromises);
     console.table(fileDetail);
-    const commands = chalk.bold.black("ctrl + C");
+    const commands = chalk.bold.black('ctrl + C');
     const exitCommand = chalk.bold.green('If you want to exit, press');
     console.log(`${exitCommand} ${commands}`);
   } catch (error) {
-    console.error("Error occurred while reading the directory!", error);
+    console.error('Error occurred while reading the directory!', error);
   }
 }
-
-
 
 //Function for creating the directory
 function createDir(filepath: string) {
   if (!fs.existsSync(filepath)) {
     fs.mkdirSync(filepath);
-    console.log("Sucessfully created directiory");
+    console.log('Sucessfully created directiory');
     process.exit();
   }
 }
 
-
 //Function for creating the file
 function createFile(filepath: string) {
-  fs.openSync(filepath, "w");
+  fs.openSync(filepath, 'w');
   console.log(`Successfully created the file`);
   process.exit();
 }
-
 
 //Function for the file deletion
 async function deleteFile(filepath: string) {
@@ -84,15 +75,12 @@ async function deleteFile(filepath: string) {
   }
 }
 
-
 //This is for showing all the availaible files in the current directory
 if (options.ls) {
   const __dirname = new URL('.', import.meta.url).pathname;
-  const filepath = typeof options.ls === "string" ? options.ls : __dirname;
+  const filepath = typeof options.ls === 'string' ? options.ls : __dirname;
   listDirContents(filepath);
 }
-
-
 
 //This is for deleting the file
 if (options.rm) {
@@ -101,49 +89,40 @@ if (options.rm) {
   deleteFile(filePath);
 }
 
-//This is for creating the directory 
+//This is for creating the directory
 if (options.mkdir) {
   const __dirname = new URL('.', import.meta.url).pathname;
   createDir(path.resolve(__dirname, options.mkdir));
 }
 
-
-//This id for creating a file 
+//This id for creating a file
 if (options.touch) {
   const __dirname = new URL('.', import.meta.url).pathname;
   createFile(path.resolve(__dirname, options.touch));
 }
 
-
 //This is for showing the help section to the user
-if(options.help){
+if (options.help) {
   program.help();
 }
 
-
-//This is for showing the current version of the package to the user 
-if(options.version){
-  process.argv
+//This is for showing the current version of the package to the user
+if (options.version) {
+  process.argv;
 }
 
-
-
-//If the user does not input any field then the help section will be shown to the user 
+//If the user does not input any field then the help section will be shown to the user
 if (!process.argv.slice(2).length) {
   program.help();
 }
 
-
-
 //To draw the input entered into the ascii format
-if(options.draw){
+if (options.draw) {
   console.log(figlet.textSync(options.draw));
-  const commands = chalk.bold.black("ctrl + C");
+  const commands = chalk.bold.black('ctrl + C');
   const exitCommand = chalk.bold.green('If you want to exit, press');
   console.log(`${exitCommand} ${commands}`);
-  
 }
-
 
 //To show all the user secrets defined in .env during the development process
 if (options.show) {
@@ -222,22 +201,18 @@ if (options.show) {
     'TERM_PROGRAM',
     '_',
   ];
-  
-  
-const showData: Record<string, string> = {};
-for (const [key, value] of Object.entries(data)) {
-  if (!excludedKeys.includes(key) && value !== undefined) {
-    showData[key] = value;
+
+  const showData: Record<string, string> = {};
+  for (const [key, value] of Object.entries(data)) {
+    if (!excludedKeys.includes(key) && value !== undefined) {
+      showData[key] = value;
+    }
   }
+  console.table(showData);
+  const commands = chalk.bold.black('ctrl + C');
+  const exitCommand = chalk.bold.green('If you want to exit, press');
+  console.log(`${exitCommand} ${commands}`);
 }
-console.table(showData);
-const commands = chalk.bold.black("ctrl + C");
-const exitCommand = chalk.bold.green('If you want to exit, press');
-console.log(`${exitCommand} ${commands}`);
-
-}
-
-
 
 readline.emitKeypressEvents(process.stdin);
 process.stdin.setRawMode(true);
@@ -246,9 +221,6 @@ process.stdin.on('keypress', (str, key) => {
     console.clear();
   }
 });
-
-
-
 
 function setupExitHandler() {
   readline.emitKeypressEvents(process.stdin);
